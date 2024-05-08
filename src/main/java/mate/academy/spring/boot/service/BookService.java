@@ -1,13 +1,18 @@
 package mate.academy.spring.boot.service;
 
 import java.util.List;
-import mate.academy.spring.boot.model.Book;
+import mate.academy.spring.boot.controller.CreateBookRequestDto;
+import mate.academy.spring.boot.dto.BookDto;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface BookService {
 
-    Book save(Book book);
+    BookDto save(CreateBookRequestDto requestDto);
 
-    List<Book> findAll();
+    List<BookDto> findAll();
+
+    BookDto findById(Long id);
+
+    List<BookDto> getAllByTitle(String title);
 }
