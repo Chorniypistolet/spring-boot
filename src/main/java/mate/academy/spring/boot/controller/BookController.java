@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mate.academy.spring.boot.dto.BookDto;
 import mate.academy.spring.boot.service.BookService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -30,5 +31,11 @@ public class BookController {
     @PostMapping
     public BookDto createBook(@RequestBody CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        bookService.deleteById(id);
     }
 }
