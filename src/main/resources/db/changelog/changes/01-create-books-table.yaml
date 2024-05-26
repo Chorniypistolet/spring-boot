@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create-books-table.yaml
+      id: 1
       author: ChorniyPistolet
       changes:
         - createTable:
@@ -41,7 +41,7 @@ databaseChangeLog:
                   type: VARCHAR(255)
               - column:
                   name: is_deleted
-                  type: BOOLEAN
+                  type: BIT
                   defaultValueBoolean: false
                   constraints:
                     nullable: false
