@@ -15,4 +15,6 @@ public interface BookService {
     BookDto findById(Long id);
 
     List<BookDto> getAllByTitle(String title);
+
+    void deleteById(Long id);
 }
