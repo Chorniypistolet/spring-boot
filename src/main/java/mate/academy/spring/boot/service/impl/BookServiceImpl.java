@@ -44,7 +44,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> getAllByTitle(String title) {
-        return bookRepository.findAllByTitleContainsIgnoreCase(title).stream()
+        return bookRepository.findAllByTitle(title).stream()
                 .map(bookMapper::toDto)
                 .toList();
     }
