@@ -1,17 +1,15 @@
 package mate.academy.spring.boot.service.impl;
 
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import mate.academy.spring.boot.controller.CreateBookRequestDto;
 import mate.academy.spring.boot.dto.BookDto;
-import mate.academy.spring.boot.dto.BookSearchParameters;
 import mate.academy.spring.boot.exception.EntityNotFoundException;
 import mate.academy.spring.boot.mapper.BookMapper;
 import mate.academy.spring.boot.model.Book;
-import mate.academy.spring.boot.repository.book.BookRepository;
-import mate.academy.spring.boot.repository.book.BookSpecificationBuilder;
+import mate.academy.spring.boot.repository.BookRepository;
 import mate.academy.spring.boot.service.BookService;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
-    private final BookSpecificationBuilder bookSpecificationBuilder;
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
