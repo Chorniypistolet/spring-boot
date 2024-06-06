@@ -3,7 +3,9 @@ package mate.academy.spring.boot.controller;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mate.academy.spring.boot.dto.BookDto;
+import mate.academy.spring.boot.dto.BookSearchParameters;
 import mate.academy.spring.boot.service.BookService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -41,5 +43,5 @@ public class BookController {
     @GetMapping("/search")
     public List<BookDto> searchBooks(BookSearchParameters searchParameters) {
         return bookService.searchBooks(searchParameters);
-    };
+    }
 }

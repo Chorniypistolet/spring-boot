@@ -11,20 +11,20 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
-    private SpecificationProviderManager<Book> specificationProviderManager;
+    private final SpecificationProviderManager<Book> specificationProviderManager;
 
     @Override
     public Specification<Book> build(BookSearchParameters searchParameters) {
         Specification<Book> bookSpec = Specification.where(null);
-        if (searchParameters.titles() != null && searchParameters.titles().length > 0) {
+        if (searchParameters.title() != null && searchParameters.title().length > 0) {
             bookSpec = bookSpec.and(specificationProviderManager
                     .getSpecificationProvider("title")
-                    .getSpecification(searchParameters.titles()));
+                    .getSpecification(searchParameters.title()));
         }
-        if (searchParameters.authors() != null && searchParameters.authors().length > 0) {
+        if (searchParameters.author() != null && searchParameters.author().length > 0) {
             bookSpec = bookSpec.and(specificationProviderManager
                     .getSpecificationProvider("author")
-                    .getSpecification(searchParameters.authors()));
+                    .getSpecification(searchParameters.author()));
         }
         if (searchParameters.isbn() != null && searchParameters.isbn().length > 0) {
             bookSpec = bookSpec.and(specificationProviderManager
