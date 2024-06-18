@@ -1,7 +1,6 @@
 package mate.academy.spring.boot.service.impl;
 
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import mate.academy.spring.boot.controller.CreateBookRequestDto;
 import mate.academy.spring.boot.dto.BookDto;
@@ -56,9 +55,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> searchBooks(BookSearchParameters bookSearchParameters) {
+    public List<BookDto> searchBooks(BookSearchParameters bookSearchParameters, Pageable pageable) {
         Specification<Book> bookSpecification = bookSpecificationBuilder.build(bookSearchParameters);
-        return bookRepository.findAll(bookSpecification).stream()
+        return bookRepository.findAll(bookSpecification, pageable).stream()
                 .map(bookMapper::toDto)
                 .toList();
     }

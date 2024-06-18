@@ -1,7 +1,6 @@
 package mate.academy.spring.boot.controller;
 
 import java.util.List;
-
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import mate.academy.spring.boot.dto.BookDto;
 import mate.academy.spring.boot.dto.BookSearchParameters;
 import mate.academy.spring.boot.service.BookService;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,7 @@ public class BookController {
 
     @GetMapping
     @Operation(summary = "Get all books")
-    public List<BookDto> getAll(Pageable pageable) {
+    public List<BookDto> getAll(@ParameterObject @PageableDefault Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
@@ -62,7 +63,7 @@ public class BookController {
 
     @GetMapping("/search")
     @Operation(summary = "Get a books by search params")
-    public List<BookDto> searchBooks(BookSearchParameters searchParameters) {
-        return bookService.searchBooks(searchParameters);
+    public List<BookDto> searchBooks(BookSearchParameters searchParameters, @ParameterObject @PageableDefault Pageable pageable) {
+        return bookService.searchBooks(searchParameters, pageable);
     }
 }
