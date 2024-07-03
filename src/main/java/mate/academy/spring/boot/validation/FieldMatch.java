@@ -1,4 +1,4 @@
-package mate.academy.spring.boot.annotations.fieldMatch;
+package mate.academy.spring.boot.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

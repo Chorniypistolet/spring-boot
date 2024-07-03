@@ -1,22 +1,16 @@
 package mate.academy.spring.boot.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
-import org.hibernate.annotations.Where;
 
 @Entity
-@Getter
-@Setter
-@ToString
+@Data
 @SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id=?")
 @SQLRestriction("is_deleted = false")
 @Table(name = "users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -24,11 +18,10 @@ public class User {
     String email;
     @Column(nullable = false)
     String password;
-    @Column(name = "first_name")
+    @Column(nullable = false)
     String firstName;
-    @Column(name = "last_name")
+    @Column(nullable = false)
     String lastName;
-    @Column(name = "shipping_address")
     String shippingAddress;
     @Column(name = "is_deleted", nullable = false)
     boolean isDeleted = false;
