@@ -13,16 +13,16 @@ import org.hibernate.annotations.SQLRestriction;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @Column(nullable = false, unique = true)
-    String email;
+    private String email;
     @Column(nullable = false)
-    String password;
+    private String password;
     @Column(nullable = false)
-    String firstName;
+    private String firstName;
     @Column(nullable = false)
-    String lastName;
-    String shippingAddress;
-    @Column(name = "is_deleted", nullable = false)
+    private String lastName;
+    private String shippingAddress;
+    @Column(nullable = false)
     boolean isDeleted = false;
 }
