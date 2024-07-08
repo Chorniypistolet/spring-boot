@@ -2,11 +2,16 @@ package mate.academy.spring.boot.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id=?")
 @SQLRestriction("is_deleted = false")
 @Table(name = "users")
@@ -24,5 +29,5 @@ public class User {
     private String lastName;
     private String shippingAddress;
     @Column(nullable = false)
-    boolean isDeleted = false;
+    private boolean isDeleted = false;
 }
