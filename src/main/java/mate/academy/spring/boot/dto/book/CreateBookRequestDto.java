@@ -1,4 +1,4 @@
-package mate.academy.spring.boot.controller;
+package mate.academy.spring.boot.dto.book;
 
 import java.math.BigDecimal;
 import jakarta.validation.constraints.Min;

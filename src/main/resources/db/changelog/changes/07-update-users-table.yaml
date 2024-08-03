@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 7
+      author: ChorniyPistolet
+      preConditions:
+        - onFail: CONTINUE
+          sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM users_roles WHERE role_id IS NULL
+      changes:
+        - update:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: role_id
+                  value: 1
+            where: "role_id IS NULL"

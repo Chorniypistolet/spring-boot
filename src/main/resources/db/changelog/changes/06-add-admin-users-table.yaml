@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6
+      author: ChorniyPistolet
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "admin@mail.com"
+              - column:
+                  name: password
+                  value: "$2a$10$Y4q3wbO7NeW8eWRaE0jqMuIKIlmMNC1qt6ypQdTNPtgKq00rk3.Ki"
+              - column:
+                  name: first_name
+                  value: "Admin"
+              - column:
+                  name: last_name
+                  value: "Adminovich"
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: role_id
+                  value: 2
