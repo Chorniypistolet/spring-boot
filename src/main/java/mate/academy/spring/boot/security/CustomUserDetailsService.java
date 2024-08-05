@@ -1,6 +1,7 @@
 package mate.academy.spring.boot.security;
 
 import lombok.RequiredArgsConstructor;
+import mate.academy.spring.boot.exception.EntityNotFoundException;
 import mate.academy.spring.boot.model.User;
 import mate.academy.spring.boot.repository.user.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username)
+        User user = userRepository.findByEmailWithRoles(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Can't find user by username: " + username));
         Set<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))

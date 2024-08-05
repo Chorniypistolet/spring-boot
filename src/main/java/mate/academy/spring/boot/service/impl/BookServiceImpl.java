@@ -1,6 +1,7 @@
 package mate.academy.spring.boot.service.impl;
 
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import mate.academy.spring.boot.dto.book.CreateBookRequestDto;
 import mate.academy.spring.boot.dto.book.BookDto;
@@ -15,6 +16,7 @@ import mate.academy.spring.boot.service.BookService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -30,6 +32,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<BookDto> findAll(Pageable pageable) {
         return bookRepository.findAll(pageable).stream()
                 .map(bookMapper::toDto)
