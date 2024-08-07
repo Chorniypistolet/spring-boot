@@ -1,5 +1,6 @@
 package mate.academy.spring.boot.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.spring.boot.dto.user.UserResponseDto;
 import mate.academy.spring.boot.dto.user.UserRegistrationRequestDto;
@@ -17,7 +18,7 @@ public class AuthenticationController {
     private final UserService userService;
 
     @PostMapping("/registration")
-    public UserResponseDto register(@RequestBody UserRegistrationRequestDto requestDto) throws RegistrationException {
+    public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto requestDto) throws RegistrationException {
         return userService.register(requestDto);
     }
 
