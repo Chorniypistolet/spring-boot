@@ -11,7 +11,7 @@ databaseChangeLog:
                   value: "admin@mail.com"
               - column:
                   name: password
-                  value: "$2a$10$Y4q3wbO7NeW8eWRaE0jqMuIKIlmMNC1qt6ypQdTNPtgKq00rk3.Ki"
+                  value: "$2a$10$Y4q3wbO7NeW8eWRaE0jqMuIKIlmMNC1qt6ypQdTNPtgKq00rk3.Ki" # plaintext password: 12345678
               - column:
                   name: first_name
                   value: "Admin"
