@@ -1,6 +1,7 @@
 package mate.academy.spring.boot.mapper;
 
 import mate.academy.spring.boot.config.MapperConfig;
+import mate.academy.spring.boot.dto.book.BookDtoWithoutCategoryIds;
 import mate.academy.spring.boot.dto.book.CreateBookRequestDto;
 import mate.academy.spring.boot.dto.book.BookDto;
 import mate.academy.spring.boot.dto.book.UpdateBookRequestDto;
@@ -18,4 +19,6 @@ public interface BookMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateModel(@MappingTarget Book book, UpdateBookRequestDto requestDto);
+
+    BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
 }

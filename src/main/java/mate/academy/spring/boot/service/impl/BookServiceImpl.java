@@ -1,12 +1,8 @@
 package mate.academy.spring.boot.service.impl;
 
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
-import mate.academy.spring.boot.dto.book.CreateBookRequestDto;
-import mate.academy.spring.boot.dto.book.BookDto;
-import mate.academy.spring.boot.dto.book.BookSearchParameters;
-import mate.academy.spring.boot.dto.book.UpdateBookRequestDto;
+import mate.academy.spring.boot.dto.book.*;
 import mate.academy.spring.boot.exception.EntityNotFoundException;
 import mate.academy.spring.boot.mapper.BookMapper;
 import mate.academy.spring.boot.model.Book;
@@ -73,5 +69,12 @@ public class BookServiceImpl implements BookService {
         );
         bookMapper.updateModel(book, requestDto);
         return bookMapper.toDto(bookRepository.save(book));
+    }
+
+    @Override
+    public List<BookDtoWithoutCategoryIds> findAllByCategoryId(Long id) {
+        return bookRepository.findAllByCategoryId(id).stream()
+                .map(bookMapper::toDtoWithoutCategories)
+                .toList();
     }
 }
