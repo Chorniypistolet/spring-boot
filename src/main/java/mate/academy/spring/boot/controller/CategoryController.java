@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.spring.boot.dto.book.BookDtoWithoutCategoryIds;
 import mate.academy.spring.boot.dto.category.CategoryDto;
-import mate.academy.spring.boot.mapper.BookMapper;
+import mate.academy.spring.boot.dto.category.CategoryRequestDto;
 import mate.academy.spring.boot.service.BookService;
 import mate.academy.spring.boot.service.CategoryService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,13 +16,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
-    private final BookMapper bookMapper;
     private final BookService bookService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public CategoryDto createCategory(@RequestBody @Valid CategoryDto categoryDto) {
-        return categoryService.save(categoryDto);
+    public CategoryDto createCategory(@RequestBody @Valid CategoryRequestDto categoryRequestDto) {
+        return categoryService.save(categoryRequestDto);
     }
 
     @GetMapping
@@ -37,8 +36,8 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public CategoryDto updateCategory(@PathVariable Long id, @RequestBody @Valid CategoryDto categoryDto) {
-        return categoryService.update(id, categoryDto);
+    public CategoryDto updateCategory(@PathVariable Long id, @RequestBody @Valid CategoryRequestDto categoryRequestDto) {
+        return categoryService.update(id, categoryRequestDto);
     }
 
     @DeleteMapping("/{id}")
@@ -48,9 +47,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}/books")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(@PathVariable Long id) {
         return bookService.findAllByCategoryId(id);
     }
-
 }

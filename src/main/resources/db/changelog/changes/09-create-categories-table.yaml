@@ -8,22 +8,22 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: BIGINT
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: name
-                  type: varchar(255)
+                  type: VARCHAR(255)
                   constraints:
                     nullable: false
               - column:
                   name: description
-                  type: varchar(255)
+                  type: VARCHAR(255)
               - column:
-                  name: deleted
-                  type: boolean
-                  defaultValue: false
+                  name: is_deleted
+                  type: TINYINT
                   constraints:
                     nullable: false
+                    defaultValue: 0
