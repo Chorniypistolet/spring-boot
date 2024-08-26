@@ -5,7 +5,6 @@ import mate.academy.spring.boot.model.Book;
 import mate.academy.spring.boot.repository.SpecificationProvider;
 import mate.academy.spring.boot.repository.SpecificationProviderManager;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @RequiredArgsConstructor
