@@ -42,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto update(Long id, CategoryRequestDto categoryRequestDto) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No such a category with id: " + id));
-        category = categoryMapper.updateCategoryFromDto(categoryRequestDto, category);
+        categoryMapper.updateCategoryFromDto(categoryRequestDto, category);
         return categoryMapper.toDto(category);
     }
 
