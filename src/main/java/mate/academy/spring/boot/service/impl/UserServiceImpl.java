@@ -1,5 +1,6 @@
 package mate.academy.spring.boot.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import mate.academy.spring.boot.dto.user.UserRegistrationRequestDto;
 import mate.academy.spring.boot.dto.user.UserResponseDto;
@@ -28,5 +29,11 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return userMapper.toUserResponse(user);
+    }
+
+    @Override
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Not found user with id " + id));
     }
 }

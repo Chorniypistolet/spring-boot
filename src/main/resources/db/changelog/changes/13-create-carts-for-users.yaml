@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13
+      author: ChorniyPistolet
+      changes:
+        - sql:
+            dbms: mysql
+            splitStatements: false
+            stripComments: true
+            sql: |
+              INSERT INTO shopping_carts (user_id)
+              SELECT id FROM users WHERE is_deleted = 0;

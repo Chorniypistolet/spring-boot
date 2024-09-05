@@ -15,6 +15,8 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface BookMapper {
     BookDto toDto(Book book);
 
+    Book toEntity(BookDto bookDto);
+
     Book toModel(CreateBookRequestDto requestDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
