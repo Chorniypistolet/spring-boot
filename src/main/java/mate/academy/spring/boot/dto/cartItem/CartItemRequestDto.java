@@ -1,14 +1,14 @@
 package mate.academy.spring.boot.dto.cartItem;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
 public class CartItemRequestDto {
     @NotNull
+    @Positive
     private Long bookId;
-    @NotNull
-    @Min(1)
+    @Positive
     private int quantity;
 }

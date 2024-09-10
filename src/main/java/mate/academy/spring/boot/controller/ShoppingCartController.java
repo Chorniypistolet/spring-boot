@@ -1,5 +1,6 @@
 package mate.academy.spring.boot.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.spring.boot.dto.cartItem.CartItemRequestDto;
 import mate.academy.spring.boot.dto.shoppingCart.ShoppingCartDto;
@@ -22,27 +23,24 @@ public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
 
     @PostMapping
-    ShoppingCartDto addBookToCart(@AuthenticationPrincipal User user, @RequestBody CartItemRequestDto cartItemRequestDto) {
+    public ShoppingCartDto addBookToCart(@AuthenticationPrincipal User user, @RequestBody @Valid CartItemRequestDto cartItemRequestDto) {
         return shoppingCartService.addBookToCart(user.getId(), cartItemRequestDto);
     }
+
     @GetMapping
-    public ShoppingCartDto getShoppingCart (@AuthenticationPrincipal User user){
+    public ShoppingCartDto getShoppingCart(@AuthenticationPrincipal User user){
         return shoppingCartService.getCartByUserId(user.getId());
     }
 
     @PutMapping("/items/{id}")
-    public ShoppingCartDto updateCartItemQuantity (@PathVariable("id") Long id,
-            @RequestBody CartItemRequestDto cartItemRequestDto){
-        return shoppingCartService.updateCartItemQuantity(id, cartItemRequestDto.getQuantity());
+    public ShoppingCartDto updateCartItemQuantity(@AuthenticationPrincipal User user, @PathVariable("id") Long id,
+            @RequestBody @Valid CartItemRequestDto cartItemRequestDto){
+        return shoppingCartService.updateCartItemQuantity(user.getId() ,id, cartItemRequestDto.getQuantity());
     }
 
     @DeleteMapping("/items/{cartItemId}")
-    public void deleteCartItem (@PathVariable Long id){
-        shoppingCartService.deleteCartItem(id);
+    public void deleteCartItem(@AuthenticationPrincipal User user, @PathVariable Long id){
+        shoppingCartService.deleteCartItem(user.getId(), id);
     }
 
-    @DeleteMapping("/items")
-    public void clearCart(@AuthenticationPrincipal User user) {
-        shoppingCartService.clearCart(user.getId());
-    }
 }

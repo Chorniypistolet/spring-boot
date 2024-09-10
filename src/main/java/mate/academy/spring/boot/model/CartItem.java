@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,17 +18,19 @@ import lombok.ToString;
 @ToString
 @Table(name = "cart_items")
 public class CartItem {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "shopping_cart_id", nullable = false)
     private ShoppingCart shoppingCart;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
-    @Column(nullable = false)
-    private Integer quantity;
+    private int quantity;
+
+    public Integer getQuantity() {
+        return quantity;
+    }
 
 }
