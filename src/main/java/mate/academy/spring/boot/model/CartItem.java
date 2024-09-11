@@ -29,8 +29,4 @@ public class CartItem {
     private Book book;
     private int quantity;
 
-    public Integer getQuantity() {
-        return quantity;
-    }
-
 }
