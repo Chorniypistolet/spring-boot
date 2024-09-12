@@ -1,12 +1,10 @@
 package mate.academy.spring.boot.dto.shoppingCart;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import mate.academy.spring.boot.dto.cartItem.CartItemDto;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 public class ShoppingCartDto {
     private Long id;
     private Long userId;

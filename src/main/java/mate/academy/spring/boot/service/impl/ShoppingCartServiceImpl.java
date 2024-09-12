@@ -25,16 +25,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartDto getCartByUserId(Long userId) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Shopping cart not found with userId " + userId));
+        ShoppingCart shoppingCart = getShoppingCartByUserId(userId);
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
     @Transactional
     @Override
     public ShoppingCartDto addBookToCart(Long userId, CartItemRequestDto cartItemRequestDto) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Shopping cart not for user "));
+        ShoppingCart shoppingCart = getShoppingCartByUserId(userId);
         Book book = bookRepository.findById(cartItemRequestDto.getBookId())
                 .orElseThrow(() -> new EntityNotFoundException("Book not found"));
         shoppingCart.getCartItemSet().stream()
@@ -52,10 +50,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Transactional
     @Override
     public ShoppingCartDto updateCartItemQuantity(Long userId, Long id, Integer quantity) {
-        ShoppingCart cart = shoppingCartRepository.findByUserId(userId)
-                .orElseThrow(() -> new EntityNotFoundException("ShoppingCart not found for user " + id));
-        CartItem cartItem = cartItemRepository.findByIdAndShoppingCartId(id, cart.getId())
-                .orElseThrow(() -> new EntityNotFoundException("CartItem not found with id " + id));
+        ShoppingCart cart = getShoppingCartByUserId(userId);
+        CartItem cartItem = findByIdAndShoppingCartId(id, cart.getId());
         cartItem.setQuantity(quantity);
         cartItemRepository.save(cartItem);
         return shoppingCartMapper.toDto(cart);
@@ -64,10 +60,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Transactional
     @Override
     public void deleteCartItem(Long userId, Long id) {
-        ShoppingCart cart = shoppingCartRepository.findByUserId(userId)
-                .orElseThrow(() -> new EntityNotFoundException("ShoppingCart not found for user " + id));
-        CartItem cartItem = cartItemRepository.findByIdAndShoppingCartId(id, cart.getId())
-                .orElseThrow(() -> new EntityNotFoundException("CartItem not found with id " + id));
+        ShoppingCart cart = getShoppingCartByUserId(userId);
+        CartItem cartItem = findByIdAndShoppingCartId(id, cart.getId());
         cartItemRepository.delete(cartItem);
     }
 
@@ -80,4 +74,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cartItemRepository.save(newCartItem);
     }
 
+    private ShoppingCart getShoppingCartByUserId(Long userId) {
+        return shoppingCartRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("ShoppingCart not found for user " + userId));
+    }
+
+    private CartItem findByIdAndShoppingCartId(Long itemId, Long cartId) {
+        return cartItemRepository.findByIdAndShoppingCartId(itemId, cartId)
+                .orElseThrow(() -> new EntityNotFoundException("CartItem not found with id " + itemId));
+    }
 }

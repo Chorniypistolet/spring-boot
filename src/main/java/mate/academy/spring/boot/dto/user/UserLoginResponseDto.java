@@ -1,10 +1,8 @@
 package mate.academy.spring.boot.dto.user;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class UserLoginResponseDto {
     String token;
 }

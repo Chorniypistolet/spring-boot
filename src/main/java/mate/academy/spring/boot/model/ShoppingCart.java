@@ -20,7 +20,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "cartItemSet")
 @Table(name = "shopping_carts")
 public class ShoppingCart {
     @Id

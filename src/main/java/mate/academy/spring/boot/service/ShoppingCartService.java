@@ -11,5 +11,4 @@ public interface ShoppingCartService {
     ShoppingCartDto updateCartItemQuantity(Long userId, Long cartItemId, Integer quantity);
 
     void deleteCartItem(Long userId, Long id);
-
 }
