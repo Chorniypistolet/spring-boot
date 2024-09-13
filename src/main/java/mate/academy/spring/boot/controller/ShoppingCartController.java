@@ -42,5 +42,4 @@ public class ShoppingCartController {
     public void deleteCartItem(@AuthenticationPrincipal User user, @PathVariable Long id){
         shoppingCartService.deleteCartItem(user.getId(), id);
     }
-
 }
