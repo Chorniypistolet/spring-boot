@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 18
+      author: ChorniyPistolet
+      changes:
+        - update:
+            tableName: orders
+            columns:
+              - column:
+                  name: status
+                  value: "PENDING"
+            where: status = 'pending'
+
+        - update:
+            tableName: orders
+            columns:
+              - column:
+                  name: status
+                  value: "COMPLETED"
+            where: status = 'completed'
+
+        - update:
+            tableName: orders
+            columns:
+              - column:
+                  name: status
+                  value: "CANCELLED"
+            where: status = 'cancelled'
+
+        - update:
+            tableName: orders
+            columns:
+              - column:
+                  name: status
+                  value: "DELIVERED"
+            where: status = 'delivered'

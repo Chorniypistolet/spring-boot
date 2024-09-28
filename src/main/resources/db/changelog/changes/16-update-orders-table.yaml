@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 16
+      author: ChorniyPistolet
+      changes:
+        - modifyDataType:
+            tableName: orders
+            columnName: status
+            newDataType: "ENUM('pending', 'completed', 'cancelled', 'delivered')"
