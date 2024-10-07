@@ -1,10 +1,10 @@
 package mate.academy.spring.boot.dto.status;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class StatusRequestDto {
-    @NotNull
+    @NotBlank
     private String status;
 }

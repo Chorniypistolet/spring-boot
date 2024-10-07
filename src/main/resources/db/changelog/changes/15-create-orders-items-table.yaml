@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
-      id: 002-create-order-item-table
-      author: yourname
+      id: 15
+      author: ChorniyPistolet
       changes:
         - createTable:
             tableName: order_items

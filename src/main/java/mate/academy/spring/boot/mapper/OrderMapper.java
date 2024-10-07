@@ -8,16 +8,23 @@ import mate.academy.spring.boot.model.CartItem;
 import mate.academy.spring.boot.model.ShoppingCart;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(config = MapperConfig.class, uses = OrderItemMapper.class)
 public interface OrderMapper {
-
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "orderItems", target = "orderItems")
     OrderDto toDto(Order order);
+
+    List<OrderDto> toOrderDtoList(List<Order> orderList);
+
+    @Named("toUpdateDto")
+    OrderDto toUpdateDto(Order save);
 
     @Mapping(source = "cartItemSet", target = "orderItems")
     @Mapping(source = "user", target = "user")

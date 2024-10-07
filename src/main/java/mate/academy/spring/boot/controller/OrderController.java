@@ -4,9 +4,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.spring.boot.dto.order.OrderDto;
 import mate.academy.spring.boot.dto.order.OrderRequestDto;
+import mate.academy.spring.boot.dto.orderItemDto.OrderItemDto;
 import mate.academy.spring.boot.dto.status.StatusRequestDto;
 import mate.academy.spring.boot.model.User;
 import mate.academy.spring.boot.service.OrderService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,13 +32,23 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<OrderDto> getAll(@AuthenticationPrincipal User user) {
-        return orderService.getAllOrdersByUserId(user.getId());
+    public List<OrderDto> getAll(@AuthenticationPrincipal User user, Pageable pageable) {
+        return orderService.getAllOrdersByUserId(user.getId(), pageable);
     }
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public OrderDto updateOrderStatus(@PathVariable Long id, @RequestBody @Valid StatusRequestDto statusRequestDto) {
         return orderService.updateStatus(id, statusRequestDto);
+    }
+
+    @GetMapping("/{orderId}/items")
+    public List<OrderItemDto> getAllOrderItem (@PathVariable Long orderId) {
+        return orderService.getItemsByOrderId(orderId);
+    }
+
+    @GetMapping("/{orderId}/items/{itemId}")
+    public OrderItemDto getOrderItemById(@PathVariable Long orderId, @PathVariable Long itemId) {
+        return orderService.getItemByOrderIdAndItemId(orderId, itemId);
     }
 }

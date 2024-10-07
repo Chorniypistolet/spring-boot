@@ -19,7 +19,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: status
-                  type: VARCHAR(255)
+                  type: ENUM('PENDING', 'COMPLETED', 'CANCELLED', 'DELIVERED')
                   constraints:
                     nullable: false
               - column:
@@ -44,10 +44,3 @@ databaseChangeLog:
             constraintName: fk_order_user
             referencedTableName: users
             referencedColumnNames: id
-
-        - createIndex:
-            tableName: orders
-            columns:
-              - column:
-                  name: user_id
-            indexName: idx_order_user

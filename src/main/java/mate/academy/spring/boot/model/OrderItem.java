@@ -11,13 +11,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import java.math.BigDecimal;
 
 @Entity
 @Getter
 @Setter
-@ToString
 @Table(name = "order_items")
 public class OrderItem {
     @Id
