@@ -26,7 +26,7 @@ public class BookRepositoryTest {
     @Sql(scripts = {
             "classpath:database/add-books-to-books-table.sql",
             "classpath:database/add-categories-to-categories-table.sql",
-            "classpath:database/add-books-categories-to-books-categories-table.sql",
+            "classpath:database/add-books-categories-to-books-categories-table.sql"
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = {
             "classpath:database/remove-books-categories-from-books-categories-table.sql",
@@ -35,7 +35,6 @@ public class BookRepositoryTest {
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void testFindAllByCategoryId_WithExistingCategory_ShouldReturnBooks() {
         List<Book> result = bookRepository.findAllByCategoryId(1L);
-        System.out.println("Books found: " + result);
         assertEquals(2, result.size());
         assertTrue(result.stream().noneMatch(Book::isDeleted));
     }

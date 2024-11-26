@@ -35,7 +35,7 @@ public class CategoryServiceTests {
     @Test
     @DisplayName("""
         Test checks whether the method correctly returns a list of CategoryDto""")
-    void testFindAll_WithCorrectParameters_ShouldReturnListOfCategoryDtos() {
+    void testFindAll_WithCorrectParameters_ShouldReturnListOfCategoryDto() {
         List<Category> categories = List.of(new Category(), new Category());
         List<CategoryDto> expected = List.of(new CategoryDto(), new CategoryDto());
         when(categoryRepository.findAll()).thenReturn(categories);
@@ -98,14 +98,11 @@ public class CategoryServiceTests {
             """)
     void testUpdate_WithCorrectParameters_ShouldReturnUpdatedCategoryDto() {
         Long id = 1L;
-        Category category = new Category();
-        category.setId(id);
-        CategoryRequestDto requestDto = new CategoryRequestDto();
-        requestDto.setName("New Category Name");
-        requestDto.setDescription("New Description");
-        CategoryDto expected = new CategoryDto();
-        expected.setName("New Category Name");
-        expected.setDescription("New Description");
+        String name = "New Category Name";
+        String description = "New Description";
+        Category category = getCategory(id);
+        CategoryRequestDto requestDto = getCategoryRequestDto(name, description);
+        CategoryDto expected = getCategoryDto(name, description);
         when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
         when(categoryRepository.save(category)).thenReturn(category);
         when(categoryMapper.updateCategoryFromDto(requestDto, category)).thenAnswer(invocation -> {
@@ -131,4 +128,25 @@ public class CategoryServiceTests {
         categoryService.deleteById(id);
         verify(categoryRepository, times(1)).deleteById(id);
     }
+
+    private CategoryRequestDto getCategoryRequestDto(String name, String description) {
+        CategoryRequestDto requestDto = new CategoryRequestDto();
+        requestDto.setName(name);
+        requestDto.setDescription(description);
+        return requestDto;
+    }
+
+    private Category getCategory(Long id) {
+        Category category = new Category();
+        category.setId(id);
+        return category;
+    }
+
+    private CategoryDto getCategoryDto(String name, String description) {
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setName(name);
+        categoryDto.setDescription(description);
+        return categoryDto;
+    }
+
 }

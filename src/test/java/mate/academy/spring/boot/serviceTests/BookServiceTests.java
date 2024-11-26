@@ -40,30 +40,21 @@ public class BookServiceTests {
 
     @Test
     @DisplayName("""
-            Verification of book storage with correct fields""")
+            Should save a book with correct fields and return the expected BookDto""")
     void testSave_WithCorrectParameters_ShouldReturnSavedBookDto() {
-        CreateBookRequestDto requestDto = new CreateBookRequestDto();
-        requestDto.setAuthor("Author");
-        requestDto.setTitle("Title");
-        requestDto.setPrice(BigDecimal.valueOf(222));
-        requestDto.setIsbn(String.valueOf(123123123));
-        Book book = new Book();
-        book.setAuthor("Author");
-        book.setTitle("Title");
-        book.setPrice(BigDecimal.valueOf(222));
-        book.setIsbn(String.valueOf(123123123));
-        BookDto expected = new BookDto();
-        expected.setAuthor("Author");
-        expected.setTitle("Title");
-        expected.setPrice(BigDecimal.valueOf(222));
-        expected.setIsbn(String.valueOf(123123123));
+        String title = "title";
+        String author = "Author";
+        BigDecimal price = BigDecimal.valueOf(222);
+        String isbn = String.valueOf(123123123);
+        CreateBookRequestDto requestDto = getCreateBookRequestDto(title, author, price, isbn);
+        Book book = getBook(title, author, price, isbn);
+        BookDto expected = getBookDto(title, author, price, isbn);
         when(bookMapper.toModel(requestDto)).thenReturn(book);
         when(bookRepository.save(book)).thenReturn(book);
         when(bookMapper.toDto(book)).thenReturn(expected);
         BookDto actual = bookService.save(requestDto);
         assertEquals(expected, actual, "Expected and actual BookDto should match.");
-        verify(bookRepository).save(book);
-    }
+        verify(bookRepository).save(book);    }
 
     @Test
     @DisplayName("""
@@ -90,7 +81,7 @@ public class BookServiceTests {
     @Test
     @DisplayName("""
             Test checks whether the method correctly returns a list of objects of type BookDto""")
-    void testFindAll_WithCorrectParameters_ShouldReturnListOfBookDtos() {
+    void testFindAll_WithCorrectParameters_ShouldReturnListOfBookDto() {
         Pageable pageable = PageRequest.of(0, 10);
         List<Book> books = List.of(new Book());
         Page<Book> bookPage = new PageImpl<>(books, pageable, books.size());
@@ -159,5 +150,35 @@ public class BookServiceTests {
         List<BookDto> actual = bookService.searchBooks(parameters, pageable);
         List<BookDto> expected = List.of(bookDto);
         assertEquals(expected, actual);
+    }
+
+    private CreateBookRequestDto getCreateBookRequestDto(String title, String author,
+                                                        BigDecimal price, String isbn) {
+        CreateBookRequestDto requestDto = new CreateBookRequestDto();
+        requestDto.setTitle(title);
+        requestDto.setAuthor(author);
+        requestDto.setPrice(price);
+        requestDto.setIsbn(isbn);
+        return requestDto;
+    }
+
+    private Book getBook(String title, String author,
+                        BigDecimal price, String isbn) {
+        Book book = new Book();
+        book.setTitle(title);
+        book.setAuthor(author);
+        book.setPrice(price);
+        book.setIsbn(isbn);
+        return book;
+    }
+
+    private BookDto getBookDto(String title, String author,
+                              BigDecimal price, String isbn) {
+        BookDto bookDto = new BookDto();
+        bookDto.setTitle(title);
+        bookDto.setAuthor(author);
+        bookDto.setPrice(price);
+        bookDto.setIsbn(isbn);
+        return bookDto;
     }
 }
