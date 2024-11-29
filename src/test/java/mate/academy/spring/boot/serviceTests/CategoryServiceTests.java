@@ -52,9 +52,11 @@ public class CategoryServiceTests {
         Long id = 1L;
         Category category = new Category();
         CategoryDto expected = new CategoryDto();
+
         when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
         when(categoryMapper.toDto(category)).thenReturn(expected);
         CategoryDto actual = categoryService.getById(id);
+
         assertEquals(expected, actual);
         verify(categoryRepository, times(1)).findById(id);
         verify(categoryMapper, times(1)).toDto(category);
@@ -67,7 +69,9 @@ public class CategoryServiceTests {
             """)
     void testGetById_WithInvalidId_ShouldThrowEntityNotFoundException() {
         Long id = 1L;
+
         when(categoryRepository.findById(id)).thenReturn(Optional.empty());
+
         assertThrows(EntityNotFoundException.class, () -> categoryService.getById(id));
         verify(categoryRepository, times(1)).findById(id);
         verify(categoryMapper, never()).toDto(any(Category.class));
@@ -81,10 +85,12 @@ public class CategoryServiceTests {
         CategoryRequestDto requestDto = new CategoryRequestDto();
         Category category = new Category();
         CategoryDto expected = new CategoryDto();
+
         when(categoryMapper.toEntity(requestDto)).thenReturn(category);
         when(categoryRepository.save(category)).thenReturn(category);
         when(categoryMapper.toDto(category)).thenReturn(expected);
         CategoryDto actual = categoryService.save(requestDto);
+
         assertEquals(expected, actual);
         verify(categoryMapper, times(1)).toEntity(requestDto);
         verify(categoryRepository, times(1)).save(category);
@@ -103,6 +109,7 @@ public class CategoryServiceTests {
         Category category = getCategory(id);
         CategoryRequestDto requestDto = getCategoryRequestDto(name, description);
         CategoryDto expected = getCategoryDto(name, description);
+
         when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
         when(categoryRepository.save(category)).thenReturn(category);
         when(categoryMapper.updateCategoryFromDto(requestDto, category)).thenAnswer(invocation -> {
@@ -112,6 +119,7 @@ public class CategoryServiceTests {
         });
         when(categoryMapper.toDto(category)).thenReturn(expected);
         CategoryDto actual = categoryService.update(id, requestDto);
+
         assertEquals(expected, actual);
         verify(categoryRepository, times(1)).findById(id);
         verify(categoryMapper, times(1)).updateCategoryFromDto(requestDto, category);
@@ -125,7 +133,9 @@ public class CategoryServiceTests {
             """)
     void testDeleteById_WithValidId_ShouldDeleteCategory() {
         Long id = 1L;
+
         categoryService.deleteById(id);
+
         verify(categoryRepository, times(1)).deleteById(id);
     }
 
