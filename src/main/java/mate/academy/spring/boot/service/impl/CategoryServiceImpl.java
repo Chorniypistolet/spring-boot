@@ -1,6 +1,6 @@
 package mate.academy.spring.boot.service.impl;
 
-import jakarta.persistence.EntityNotFoundException;
+import mate.academy.spring.boot.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import mate.academy.spring.boot.dto.category.CategoryDto;
 import mate.academy.spring.boot.dto.category.CategoryRequestDto;
@@ -43,6 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No such a category with id: " + id));
         categoryMapper.updateCategoryFromDto(categoryRequestDto, category);
+        categoryRepository.save(category);
         return categoryMapper.toDto(category);
     }
 
