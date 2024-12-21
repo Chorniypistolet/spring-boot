@@ -1,6 +1,6 @@
 package mate.academy.spring.boot.service.impl;
 
-import jakarta.persistence.EntityNotFoundException;
+import mate.academy.spring.boot.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import mate.academy.spring.boot.dto.cartItem.CartItemRequestDto;
 import mate.academy.spring.boot.dto.shoppingCart.ShoppingCartDto;

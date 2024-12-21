@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -119,7 +118,6 @@ public class BookControllerTest {
         assertNotNull(actual.getId());
         assertEquals(0, expected.getPrice().compareTo(actual.getPrice()));
         assertTrue(EqualsBuilder.reflectionEquals(expected, actual, "id", "price"));
-
     }
 
     @Test
@@ -235,7 +233,7 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should return 404 Not Found when trying to fetch a deleted non existing book")
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    public void getDeletedBook_WhenBookDoestNotExis_ShouldReturnNotFound() throws Exception {
+    public void getDeletedBook_WhenBookDoestNotExists_ShouldReturnNotFound() throws Exception {
         Long bookId = 44L;
         int expected = HttpStatus.NOT_FOUND.value();
 

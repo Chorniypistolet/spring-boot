@@ -6,13 +6,15 @@ import mate.academy.spring.boot.dto.cartItem.CartItemRequestDto;
 import mate.academy.spring.boot.dto.shoppingCart.ShoppingCartDto;
 import mate.academy.spring.boot.model.User;
 import mate.academy.spring.boot.service.ShoppingCartService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -33,6 +35,7 @@ public class ShoppingCartController {
     }
 
     @PutMapping("/items/{id}")
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ShoppingCartDto updateCartItemQuantity(@AuthenticationPrincipal User user, @PathVariable("id") Long id,
             @RequestBody @Valid CartItemRequestDto cartItemRequestDto){
         return shoppingCartService.updateCartItemQuantity(user.getId() ,id, cartItemRequestDto.getQuantity());
