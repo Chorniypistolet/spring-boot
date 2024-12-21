@@ -234,6 +234,7 @@ public class BookControllerTest {
     @DisplayName("Should return 404 Not Found when trying to fetch a deleted non existing book")
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     public void getDeletedBook_WhenBookDoestNotExists_ShouldReturnNotFound() throws Exception {
+
         Long bookId = 44L;
         int expected = HttpStatus.NOT_FOUND.value();
 
