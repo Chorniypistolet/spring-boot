@@ -1,4 +1,4 @@
-package mate.academy.spring.boot.repositoryTests;
+package mate.academy.spring.boot.repository;
 
 import mate.academy.spring.boot.model.Book;
 import mate.academy.spring.boot.repository.book.BookRepository;

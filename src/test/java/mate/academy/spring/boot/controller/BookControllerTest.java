@@ -1,4 +1,4 @@
-package mate.academy.spring.boot.controllerTests;
+package mate.academy.spring.boot.controller;
 
 import lombok.SneakyThrows;
 import mate.academy.spring.boot.dto.book.BookDto;

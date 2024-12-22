@@ -1,4 +1,4 @@
-package mate.academy.spring.boot.serviceTests;
+package mate.academy.spring.boot.service;
 
 import mate.academy.spring.boot.dto.cartItem.CartItemDto;
 import mate.academy.spring.boot.dto.cartItem.CartItemRequestDto;
@@ -19,13 +19,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -45,24 +45,30 @@ public class ShoppingCartServiceTests {
     @Test
     @DisplayName("Should return ShoppingCartDto when cart exists for user Id")
     void testGetCartByUserId_WithCorrectId_ShouldReturnShoppingCartDto() {
+        // Given
         Long userId = 1L;
         ShoppingCart shoppingCart = new ShoppingCart();
         ShoppingCartDto expected = new ShoppingCartDto();
 
+        // When
         when(shoppingCartRepository.findByUserId(userId)).thenReturn(Optional.of(shoppingCart));
         when(shoppingCartMapper.toDto(shoppingCart)).thenReturn(expected);
-        ShoppingCartDto actual = shoppingCartService.getCartByUserId(userId);
 
+        // Then
+        ShoppingCartDto actual = shoppingCartService.getCartByUserId(userId);
         assertEquals(expected, actual);
     }
 
     @Test
     @DisplayName("Should throw EntityNotFoundException when cart does not exist for user ID")
     void testGetCartByUserId_WithIncorrectId_ShouldThrowEntityNotFoundException() {
+        // Given
         Long userId = 1L;
 
+        // When
         when(shoppingCartRepository.findByUserId(userId)).thenReturn(Optional.empty());
 
+        // Then
         assertThrows(EntityNotFoundException.class, () -> shoppingCartService.getCartByUserId(userId));
     }
 
@@ -70,6 +76,7 @@ public class ShoppingCartServiceTests {
     @Test
     @DisplayName("Should add book to cart and return updated ShoppingCartDto")
     void testAddBookToCart_WithCorrectParameters_ShouldReturnShoppingCartDto() {
+        // Given
         User user = createTestUser();
         Book book = createTestBook();
         CartItemRequestDto requestDto = createTestCartItemRequestDto(book.getId());
@@ -80,19 +87,21 @@ public class ShoppingCartServiceTests {
 
         ShoppingCartDto expected = createExpectedShoppingCartDto(book, 2);
 
+        // When
         when(shoppingCartRepository.findByUserId(user.getId())).thenReturn(Optional.of(shoppingCart));
         when(bookRepository.findById(book.getId())).thenReturn(Optional.of(book));
         when(shoppingCartRepository.save(any(ShoppingCart.class))).thenReturn(shoppingCart);
         when(shoppingCartMapper.toDto(shoppingCart)).thenReturn(expected);
 
+        // Then
         ShoppingCartDto actual = shoppingCartService.addBookToCart(user.getId(), requestDto);
-
         assertEquals(expected, actual);
     }
 
     @Test
     @DisplayName("Should throw EntityNotFoundException when book is not found")
     void testAddBookToCart_WhenBookNotFound_ShouldThrowException() {
+        // Given
         User user = createTestUser();
         Long invalidBookId = 99L;
         CartItemRequestDto requestDto = createTestCartItemRequestDto(invalidBookId);
@@ -101,16 +110,18 @@ public class ShoppingCartServiceTests {
         shoppingCart.setUser(user);
         shoppingCart.setCartItemSet(new HashSet<>());
 
+        // When
         when(shoppingCartRepository.findByUserId(user.getId())).thenReturn(Optional.of(shoppingCart));
         when(bookRepository.findById(invalidBookId)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () ->
-                shoppingCartService.addBookToCart(user.getId(), requestDto));
+        // Then
+        assertThrows(EntityNotFoundException.class, () -> shoppingCartService.addBookToCart(user.getId(), requestDto));
     }
 
     @Test
     @DisplayName("Should throw EntityNotFoundException when cart item is not found")
     void testUpdateCartItemQuantity_WhenCartItemNotFound_ShouldThrowEntityNotFoundException() {
+        // Given
         User user = createTestUser();
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setId(1L);
@@ -119,10 +130,12 @@ public class ShoppingCartServiceTests {
         Long invalidCartItemId = 99L;
         int newQuantity = 3;
 
+        // When
         when(shoppingCartRepository.findByUserId(user.getId())).thenReturn(Optional.of(shoppingCart));
         when(cartItemRepository.findByIdAndShoppingCartId(invalidCartItemId, shoppingCart.getId()))
                 .thenReturn(Optional.empty());
 
+        // Then
         assertThrows(EntityNotFoundException.class, () ->
                 shoppingCartService.updateCartItemQuantity(user.getId(), invalidCartItemId, newQuantity));
     }
@@ -130,6 +143,7 @@ public class ShoppingCartServiceTests {
     @Test
     @DisplayName("Should update cart item quantity and return updated ShoppingCartDto")
     void testUpdateCartItemQuantity_WithCorrectQuantity_ShouldReturnUpdatedShoppingCartDto() {
+        // Given
         User user = createTestUser();
         Book book = createTestBook();
 
@@ -143,12 +157,13 @@ public class ShoppingCartServiceTests {
 
         ShoppingCartDto expected = createExpectedShoppingCartDto(book, newQuantity);
 
+        // When
         when(shoppingCartRepository.findByUserId(user.getId())).thenReturn(Optional.of(shoppingCart));
         when(cartItemRepository.findByIdAndShoppingCartId(cartItem.getId(), shoppingCart.getId())).thenReturn(Optional.of(cartItem));
         when(shoppingCartMapper.toDto(shoppingCart)).thenReturn(expected);
 
+        // Then
         ShoppingCartDto actual = shoppingCartService.updateCartItemQuantity(user.getId(), cartItem.getId(), newQuantity);
-
         assertNotNull(actual);
         assertEquals(expected, actual);
         assertEquals(newQuantity, cartItem.getQuantity());
@@ -157,6 +172,7 @@ public class ShoppingCartServiceTests {
     @Test
     @DisplayName("Should delete cart item when valid input is provided")
     void testDeleteCartItem_WithValidInput_ShouldDeleteCartItem() {
+        // Given
         User user = createTestUser();
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setId(1L);
@@ -166,16 +182,19 @@ public class ShoppingCartServiceTests {
         CartItem cartItem = createCartItem(1L, shoppingCart, book, 2);
         shoppingCart.setCartItemSet(Set.of(cartItem));
 
+        // When
         when(shoppingCartRepository.findByUserId(user.getId())).thenReturn(Optional.of(shoppingCart));
         when(cartItemRepository.findByIdAndShoppingCartId(cartItem.getId(), shoppingCart.getId()))
                 .thenReturn(Optional.of(cartItem));
 
+        // Then
         shoppingCartService.deleteCartItem(user.getId(), cartItem.getId());
     }
 
     @Test
     @DisplayName("Should throw EntityNotFoundException when cart item is not found")
     void testDeleteCartItem_WhenCartItemNotFound_ShouldThrowEntityNotFoundException() {
+        // Given
         User user = createTestUser();
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setId(1L);
@@ -183,23 +202,27 @@ public class ShoppingCartServiceTests {
 
         Long invalidCartItemId = 99L;
 
+        // When
         when(shoppingCartRepository.findByUserId(user.getId())).thenReturn(Optional.of(shoppingCart));
         when(cartItemRepository.findByIdAndShoppingCartId(invalidCartItemId, shoppingCart.getId()))
                 .thenReturn(Optional.empty());
 
+        // Then
         assertThrows(EntityNotFoundException.class, () ->
                 shoppingCartService.deleteCartItem(user.getId(), invalidCartItemId));
-
     }
 
     @Test
     @DisplayName("Should throw EntityNotFoundException when shopping cart is not found")
     void testDeleteCartItem_WhenShoppingCartNotFound_ShouldThrowEntityNotFoundException() {
+        // Given
         User user = createTestUser();
         Long cartItemId = 1L;
 
+        // When
         when(shoppingCartRepository.findByUserId(user.getId())).thenReturn(Optional.empty());
 
+        // Then
         assertThrows(EntityNotFoundException.class, () ->
                 shoppingCartService.deleteCartItem(user.getId(), cartItemId));
     }

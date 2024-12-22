@@ -1,4 +1,4 @@
-package mate.academy.spring.boot.controllerTests;
+package mate.academy.spring.boot.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;

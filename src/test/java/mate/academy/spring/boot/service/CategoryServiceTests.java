@@ -1,4 +1,4 @@
-package mate.academy.spring.boot.serviceTests;
+package mate.academy.spring.boot.service;
 
 import mate.academy.spring.boot.dto.category.CategoryDto;
 import mate.academy.spring.boot.dto.category.CategoryRequestDto;
