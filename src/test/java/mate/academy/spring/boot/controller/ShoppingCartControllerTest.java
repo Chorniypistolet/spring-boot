@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -123,16 +124,15 @@ public class ShoppingCartControllerTest {
         expected.setCartItems(cartItemDtoSet);
 
         MvcResult result = mockMvc.perform(post("/cart")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(requestDto))
-                        .principal(() -> String.valueOf(userId)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
                 .andReturn();
 
         ShoppingCartDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), ShoppingCartDto.class);
 
         assertNotNull(actual);
-        assertTrue(EqualsBuilder.reflectionEquals(expected, actual, "id"));
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -144,7 +144,7 @@ public class ShoppingCartControllerTest {
         invalidRequestDto.setQuantity(-1);
 
         mockMvc.perform(post("/cart")
-                        .contentType("application/json")
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidRequestDto))
                         .principal(() -> String.valueOf(userId)))
                 .andExpect(status().isBadRequest());
@@ -188,7 +188,7 @@ public class ShoppingCartControllerTest {
         cartItemRequestDto.setBookId(1L);
 
         MvcResult result = mockMvc.perform(put("/cart/items/{id}", cartItemToUpdate.getId())
-                        .contentType("application/json")
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cartItemRequestDto)))
                 .andReturn();
         ShoppingCartDto actual = objectMapper.readValue(result.getResponse()
@@ -226,7 +226,7 @@ public class ShoppingCartControllerTest {
         cartItemRequestDto.setQuantity(invalidQuantity);
 
         MvcResult result = mockMvc.perform(put("/cart/items/{id}", cartItemToUpdate.getId())
-                        .contentType("application/json")
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cartItemRequestDto)))
                 .andExpect(status().isBadRequest())
                 .andReturn();
