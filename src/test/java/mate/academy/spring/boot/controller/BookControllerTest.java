@@ -1,14 +1,35 @@
 package mate.academy.spring.boot.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import javax.sql.DataSource;
 import lombok.SneakyThrows;
 import mate.academy.spring.boot.dto.book.BookDto;
 import mate.academy.spring.boot.dto.book.BookSearchParameters;
 import mate.academy.spring.boot.dto.book.CreateBookRequestDto;
 import mate.academy.spring.boot.dto.book.UpdateBookRequestDto;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
@@ -19,27 +40,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
-import javax.sql.DataSource;
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BookControllerTest {
@@ -82,7 +83,7 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should return List BookDtoS")
     @WithMockUser
-    public void testGetAllBooks_shouldReturnListOfBooksDto() throws Exception{
+    public void testGetAllBooks_shouldReturnListOfBooksDto() throws Exception {
         List<BookDto> expected = new ArrayList<>();
         BookDto firstBook = getBookDto("Book 1", "Author 1", BigDecimal.valueOf(20.00));
         expected.add(firstBook);
@@ -112,7 +113,8 @@ public class BookControllerTest {
         MvcResult result = mockMvc.perform(get("/books/{id}", bookId))
                 .andExpect(status().isOk())
                 .andReturn();
-        BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
+        BookDto actual = objectMapper
+                .readValue(result.getResponse().getContentAsString(), BookDto.class);
 
         assertNotNull(actual);
         assertNotNull(actual.getId());
@@ -190,7 +192,8 @@ public class BookControllerTest {
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andReturn();
-        BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
+        BookDto actual = objectMapper
+                .readValue(result.getResponse().getContentAsString(), BookDto.class);
 
         assertNotNull(actual);
         assertNotNull(actual.getId());
@@ -228,7 +231,6 @@ public class BookControllerTest {
 
         assertTrue(actual.isEmpty());
     }
-
 
     @Test
     @DisplayName("Should return 404 Not Found when trying to fetch a deleted non existing book")
@@ -304,8 +306,11 @@ public class BookControllerTest {
             assertEquals(expectedBook.getCoverImage(), actualBook.getCoverImage());
 
             assertTrue(
-                    (expectedBook.getCategories() == null && (actualBook.getCategories() == null || actualBook.getCategories().isEmpty())) ||
-                            (expectedBook.getCategories() != null && expectedBook.getCategories().equals(actualBook.getCategories()))
+                    (expectedBook.getCategories() == null
+                            && (actualBook.getCategories() == null
+                            || actualBook.getCategories().isEmpty()))
+                            || (expectedBook.getCategories() != null
+                            && expectedBook.getCategories().equals(actualBook.getCategories()))
             );
         }
     }
@@ -346,7 +351,8 @@ public class BookControllerTest {
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
-        BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
+        BookDto actual = objectMapper
+                .readValue(result.getResponse().getContentAsString(), BookDto.class);
 
         assertNotNull(actual);
         assertEquals(0, expected.getPrice().compareTo(actual.getPrice()));

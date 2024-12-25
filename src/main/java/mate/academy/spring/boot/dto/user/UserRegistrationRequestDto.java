@@ -7,7 +7,8 @@ import mate.academy.spring.boot.validation.FieldMatch;
 import org.hibernate.validator.constraints.Length;
 
 @Data
-@FieldMatch(first = "password", second = "repeatPassword", message = "The password fields must match")
+@FieldMatch(first = "password", second = "repeatPassword",
+        message = "The password fields must match")
 public class UserRegistrationRequestDto {
     @NotBlank
     @Email

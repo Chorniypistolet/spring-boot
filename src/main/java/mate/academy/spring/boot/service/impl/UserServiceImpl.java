@@ -19,10 +19,11 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserResponseDto register(UserRegistrationRequestDto requestDto) throws RegistrationException {
-        if(userRepository.existsByEmail(requestDto.getEmail())) {
-            throw new RegistrationException(String.format("User with this email: %s already exists"
-                    , requestDto.getEmail()));
+    public UserResponseDto register(UserRegistrationRequestDto requestDto)
+            throws RegistrationException {
+        if (userRepository.existsByEmail(requestDto.getEmail())) {
+            throw new RegistrationException(String.format("User with this email: %s already exists",
+                    requestDto.getEmail()));
         }
         User user = userMapper.toUser(requestDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));

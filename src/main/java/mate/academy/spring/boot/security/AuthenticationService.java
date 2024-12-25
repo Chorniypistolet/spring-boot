@@ -19,7 +19,8 @@ public class AuthenticationService {
 
     public UserLoginResponseDto authenticate(UserLoginRequestDto userLoginRequestDto) {
         final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userLoginRequestDto.email(), userLoginRequestDto.password())
+                new UsernamePasswordAuthenticationToken(userLoginRequestDto
+                        .email(), userLoginRequestDto.password())
         );
         String token = jwtUtil.generateToken(userLoginRequestDto.email());
         UserLoginResponseDto userLoginResponseDto = new UserLoginResponseDto();

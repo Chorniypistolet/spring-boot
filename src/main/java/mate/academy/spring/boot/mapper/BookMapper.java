@@ -1,9 +1,9 @@
 package mate.academy.spring.boot.mapper;
 
 import mate.academy.spring.boot.config.MapperConfig;
+import mate.academy.spring.boot.dto.book.BookDto;
 import mate.academy.spring.boot.dto.book.BookDtoWithoutCategoryIds;
 import mate.academy.spring.boot.dto.book.CreateBookRequestDto;
-import mate.academy.spring.boot.dto.book.BookDto;
 import mate.academy.spring.boot.dto.book.UpdateBookRequestDto;
 import mate.academy.spring.boot.model.Book;
 import org.mapstruct.BeanMapping;

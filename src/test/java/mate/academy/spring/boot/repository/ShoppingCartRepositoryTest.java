@@ -1,11 +1,22 @@
 package mate.academy.spring.boot.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import javax.sql.DataSource;
 import lombok.SneakyThrows;
 import mate.academy.spring.boot.model.Book;
 import mate.academy.spring.boot.model.CartItem;
 import mate.academy.spring.boot.model.ShoppingCart;
 import mate.academy.spring.boot.model.User;
-import mate.academy.spring.boot.repository.shoppingCart.ShoppingCartRepository;
+import mate.academy.spring.boot.repository.shoppingcart.ShoppingCartRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,16 +26,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
-import javax.sql.DataSource;
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -39,13 +40,17 @@ public class ShoppingCartRepositoryTest {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/add-users-to-users-table.sql"));
+                    new ClassPathResource(
+                        "database/add-users-to-users-table.sql"));
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/add-books-to-books-table.sql"));
+                    new ClassPathResource(
+                        "database/add-books-to-books-table.sql"));
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/add-shopping-carts-to-shopping-carts-table.sql"));
+                    new ClassPathResource(
+                        "database/add-shopping-carts-to-shopping-carts-table.sql"));
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/add-cart-items-to-cart-items-table.sql"));
+                    new ClassPathResource(
+                        "database/add-cart-items-to-cart-items-table.sql"));
         }
     }
 
@@ -61,13 +66,17 @@ public class ShoppingCartRepositoryTest {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/remove-cart-items-from-cart-items-table.sql"));
+                    new ClassPathResource(
+                        "database/remove-cart-items-from-cart-items-table.sql"));
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/remove-shopping-carts-from-shopping-carts-table.sql"));
+                    new ClassPathResource(
+                        "database/remove-shopping-carts-from-shopping-carts-table.sql"));
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/remove-books-from-books-table.sql"));
+                    new ClassPathResource(
+                        "database/remove-books-from-books-table.sql"));
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/remove-users-from-users-table.sql"));
+                    new ClassPathResource(
+                        "database/remove-users-from-users-table.sql"));
         }
     }
 
@@ -90,9 +99,10 @@ public class ShoppingCartRepositoryTest {
         expected.getCartItemSet().forEach(expectedCartItem -> {
             boolean matchFound = actual.getCartItemSet().stream()
                     .anyMatch(actualCartItem -> {
-                        return expectedCartItem.getId().equals(actualCartItem.getId()) &&
-                                expectedCartItem.getQuantity() == actualCartItem.getQuantity() &&
-                                expectedCartItem.getBook().getId().equals(actualCartItem.getBook().getId());
+                        return expectedCartItem.getId().equals(actualCartItem.getId())
+                                && expectedCartItem.getQuantity() == actualCartItem.getQuantity()
+                                && expectedCartItem.getBook().getId()
+                                        .equals(actualCartItem.getBook().getId());
                     });
             assertTrue(matchFound);
         });
@@ -127,9 +137,10 @@ public class ShoppingCartRepositoryTest {
         expected.getCartItemSet().forEach(expectedCartItem -> {
             boolean matchFound = actual.getCartItemSet().stream()
                     .anyMatch(actualCartItem -> {
-                        return expectedCartItem.getId().equals(actualCartItem.getId()) &&
-                                expectedCartItem.getQuantity() == actualCartItem.getQuantity() &&
-                                expectedCartItem.getBook().getId().equals(actualCartItem.getBook().getId());
+                        return expectedCartItem.getId().equals(actualCartItem.getId())
+                                && expectedCartItem.getQuantity() == actualCartItem.getQuantity()
+                                && expectedCartItem.getBook().getId()
+                                        .equals(actualCartItem.getBook().getId());
                     });
             assertTrue(matchFound);
         });

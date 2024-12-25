@@ -1,19 +1,18 @@
 package mate.academy.spring.boot.mapper;
 
-import mate.academy.spring.boot.config.MapperConfig;
-import mate.academy.spring.boot.dto.order.OrderDto;
-import mate.academy.spring.boot.model.Order;
-import mate.academy.spring.boot.model.OrderItem;
-import mate.academy.spring.boot.model.CartItem;
-import mate.academy.spring.boot.model.ShoppingCart;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import mate.academy.spring.boot.config.MapperConfig;
+import mate.academy.spring.boot.dto.order.OrderDto;
+import mate.academy.spring.boot.model.CartItem;
+import mate.academy.spring.boot.model.Order;
+import mate.academy.spring.boot.model.OrderItem;
+import mate.academy.spring.boot.model.ShoppingCart;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 @Mapper(config = MapperConfig.class, uses = OrderItemMapper.class)
 public interface OrderMapper {

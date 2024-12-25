@@ -4,8 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.spring.boot.dto.user.UserLoginRequestDto;
 import mate.academy.spring.boot.dto.user.UserLoginResponseDto;
-import mate.academy.spring.boot.dto.user.UserResponseDto;
 import mate.academy.spring.boot.dto.user.UserRegistrationRequestDto;
+import mate.academy.spring.boot.dto.user.UserResponseDto;
 import mate.academy.spring.boot.exception.RegistrationException;
 import mate.academy.spring.boot.security.AuthenticationService;
 import mate.academy.spring.boot.service.UserService;
@@ -22,7 +22,8 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/registration")
-    public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto requestDto) throws RegistrationException {
+    public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto requestDto)
+            throws RegistrationException {
         return userService.register(requestDto);
     }
 

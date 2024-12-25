@@ -7,11 +7,12 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book>{
+public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
 
     List<Book> findAllByTitle(String title);
 
-    @Query("SELECT b FROM Book b JOIN b.categories c WHERE c.id = :categoryId AND b.isDeleted = false")
+    @Query("SELECT b FROM Book b JOIN b.categories c"
+            + " WHERE c.id = :categoryId AND b.isDeleted = false")
     List<Book> findAllByCategoryId(@Param("categoryId")Long categoryId);
 
 }

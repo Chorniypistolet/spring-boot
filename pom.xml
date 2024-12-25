@@ -218,6 +218,39 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.2.1</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<sourceDirectories>
+								<sourceDirectory>src/main/java</sourceDirectory>
+							</sourceDirectories>
+							<configLocation>checkstyle.xml</configLocation>
+						</configuration>
+					</execution>
+					<execution>
+						<id>check-test-code</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<sourceDirectories>
+								<sourceDirectory>src/test/java</sourceDirectory>
+							</sourceDirectories>
+							<configLocation>checkstyle.xml</configLocation>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 </project>

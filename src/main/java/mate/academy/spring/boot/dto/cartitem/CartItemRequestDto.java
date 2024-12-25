@@ -1,4 +1,4 @@
-package mate.academy.spring.boot.dto.cartItem;
+package mate.academy.spring.boot.dto.cartitem;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

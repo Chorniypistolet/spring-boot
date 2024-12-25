@@ -1,10 +1,27 @@
 package mate.academy.spring.boot.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.sql.DataSource;
 import lombok.SneakyThrows;
-import mate.academy.spring.boot.dto.cartItem.CartItemDto;
-import mate.academy.spring.boot.dto.cartItem.CartItemRequestDto;
-import mate.academy.spring.boot.dto.shoppingCart.ShoppingCartDto;
+import mate.academy.spring.boot.dto.cartitem.CartItemDto;
+import mate.academy.spring.boot.dto.cartitem.CartItemRequestDto;
+import mate.academy.spring.boot.dto.shoppingcart.ShoppingCartDto;
 import mate.academy.spring.boot.model.Book;
 import mate.academy.spring.boot.model.User;
 import org.junit.jupiter.api.AfterEach;
@@ -24,20 +41,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
-import javax.sql.DataSource;
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ShoppingCartControllerTest {
@@ -57,13 +60,17 @@ public class ShoppingCartControllerTest {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/add-users-to-users-table.sql"));
+                    new ClassPathResource(
+                        "database/add-users-to-users-table.sql"));
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/add-books-to-books-table.sql"));
+                    new ClassPathResource(
+                        "database/add-books-to-books-table.sql"));
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/add-shopping-carts-to-shopping-carts-table.sql"));
+                    new ClassPathResource(
+                        "database/add-shopping-carts-to-shopping-carts-table.sql"));
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/add-cart-items-to-cart-items-table.sql"));
+                    new ClassPathResource(
+                        "database/add-cart-items-to-cart-items-table.sql"));
         }
     }
 
@@ -95,24 +102,29 @@ public class ShoppingCartControllerTest {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/remove-cart-items-from-cart-items-table.sql"));
+                    new ClassPathResource(
+                        "database/remove-cart-items-from-cart-items-table.sql"));
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/remove-shopping-carts-from-shopping-carts-table.sql"));
+                    new ClassPathResource(
+                        "database/remove-shopping-carts-from-shopping-carts-table.sql"));
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/remove-books-from-books-table.sql"));
+                    new ClassPathResource(
+                        "database/remove-books-from-books-table.sql"));
             ScriptUtils.executeSqlScript(connection,
-                    new ClassPathResource("database/remove-users-from-users-table.sql"));
+                    new ClassPathResource(
+                        "database/remove-users-from-users-table.sql"));
         }
     }
 
     @Test
-    @DisplayName("Request to add book to ShoppingCart with valid request , we are waiting ShoppingCartDto")
+    @DisplayName("Request to add book to ShoppingCart"
+            + " with valid request , we are waiting ShoppingCartDto")
     public void testAddBookToCart_whenValidInput_shouldReturnShoppingCartDto() throws Exception {
-        Long userId = 3L;
         CartItemRequestDto requestDto = new CartItemRequestDto();
         requestDto.setBookId(2L);
         requestDto.setQuantity(1);
 
+        Long userId = 3L;
         ShoppingCartDto expected = new ShoppingCartDto();
         expected.setId(3L);
         expected.setUserId(userId);
@@ -129,14 +141,16 @@ public class ShoppingCartControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        ShoppingCartDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), ShoppingCartDto.class);
+        ShoppingCartDto actual = objectMapper.readValue(result.getResponse()
+                .getContentAsString(), ShoppingCartDto.class);
 
         assertNotNull(actual);
         assertEquals(expected, actual);
     }
 
     @Test
-    @DisplayName("Request to add book to ShoppingCart with invalid request , we are waiting status isBadRequest")
+    @DisplayName("Request to add book to ShoppingCart"
+            + " with invalid request , we are waiting status isBadRequest")
     public void testAddBookToCart_whenInvalidInput_shouldReturnBadRequest() throws Exception {
         Long userId = 1L;
         CartItemRequestDto invalidRequestDto = new CartItemRequestDto();
@@ -151,8 +165,9 @@ public class ShoppingCartControllerTest {
     }
 
     @Test
-    @DisplayName("Request to receive ShoppingCart from an authorized user, we are waiting ShoppingCartDto")
-    public void getShoppingCart_whenUserIsAuthenticated_shouldReturnShoppingCartDto() throws Exception {
+    @DisplayName("Request to receive ShoppingCart"
+            + " from an authorized user, we are waiting ShoppingCartDto")
+    public void getShoppingCart_withAuthorization_shouldReturnShoppingCartDto() throws Exception {
         ShoppingCartDto expected = getShoppingCartDto();
 
         MvcResult result = mockMvc.perform(get("/cart"))
@@ -167,8 +182,9 @@ public class ShoppingCartControllerTest {
     }
 
     @Test
-    @DisplayName("Request to receive ShoppingCart from an unauthorized user, we are waiting status Unauthorized")
-    public void getShoppingCart_whenUserIsNotAuthenticated_shouldReturnUnauthorized() throws Exception {
+    @DisplayName("Request to receive ShoppingCart"
+            + " from an unauthorized user, we are waiting status Unauthorized")
+    public void getShoppingCart_withoutAuthorization_shouldReturnUnauthorized() throws Exception {
         SecurityContextHolder.clearContext();
 
         mockMvc.perform(get("/cart"))
@@ -176,13 +192,13 @@ public class ShoppingCartControllerTest {
     }
 
     @Test
-    @DisplayName("Request to update ShoppingCart with valid new quantity, we are waiting ShoppingCartDto")
-    public void testUpdateCartItemQuantity_whenValidInput_shouldUpdateCartItemQuantity() throws Exception {
+    @DisplayName("Request to update ShoppingCart with"
+            + " valid new quantity, we are waiting ShoppingCartDto")
+    public void testUpdateCartItemQuantity_whenValidInput_shouldCartItemDto() throws Exception {
         int newQuantity = 4;
         ShoppingCartDto expected = getShoppingCartDto();
         Set<CartItemDto> cartItems = expected.getCartItems();
         CartItemDto cartItemToUpdate = cartItems.iterator().next();
-        int oldQuantity = cartItemToUpdate.getQuantity();
         CartItemRequestDto cartItemRequestDto = new CartItemRequestDto();
         cartItemRequestDto.setQuantity(newQuantity);
         cartItemRequestDto.setBookId(1L);
@@ -209,12 +225,13 @@ public class ShoppingCartControllerTest {
         assertEquals(expectedCartItem.getBookId(), actualCartItem.getBookId());
         assertEquals(expectedCartItem.getBookTitle(), actualCartItem.getBookTitle());
         assertEquals(expectedCartItem.getQuantity(), actualCartItem.getQuantity());
-        assertNotEquals(oldQuantity, cartItemToUpdate.getQuantity());
+        assertEquals(newQuantity, cartItemToUpdate.getQuantity());
     }
 
     @Test
-    @DisplayName("Request to update ShoppingCart with invalid new quantity, we are waiting status BAD_REQUEST")
-    public void testUpdateCartItemQuantity_withInvalidRequest_shouldReturnBadRequest() throws Exception {
+    @DisplayName("Request to update ShoppingCart with invalid"
+            + " new quantity, we are waiting status BAD_REQUEST")
+    public void testUpdateCartItemQuantity_invalidRequest_shouldBadRequest() throws Exception {
         int invalidQuantity = -99;
         int expected = HttpStatus.BAD_REQUEST.value();
 
@@ -247,7 +264,8 @@ public class ShoppingCartControllerTest {
     }
 
     @Test
-    @DisplayName("Request to delete ShoppingCart with invalid cartItemId, we are waiting status isNotFound")
+    @DisplayName("Request to delete ShoppingCart with invalid"
+            + " cartItemId, we are waiting status isNotFound")
     public void testDeleteCartItem_whenCartItemNotFound_shouldReturnNotFound() throws Exception {
         Long cartItemId = 999L;
         Long userId = 3L;

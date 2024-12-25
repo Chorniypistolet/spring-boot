@@ -1,10 +1,21 @@
 package mate.academy.spring.boot.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 import mate.academy.spring.boot.dto.book.BookDto;
+import mate.academy.spring.boot.dto.book.BookDtoWithoutCategoryIds;
+import mate.academy.spring.boot.dto.book.BookSearchParameters;
 import mate.academy.spring.boot.dto.book.CreateBookRequestDto;
 import mate.academy.spring.boot.dto.book.UpdateBookRequestDto;
-import mate.academy.spring.boot.dto.book.BookSearchParameters;
-import mate.academy.spring.boot.dto.book.BookDtoWithoutCategoryIds;
 import mate.academy.spring.boot.exception.EntityNotFoundException;
 import mate.academy.spring.boot.mapper.BookMapper;
 import mate.academy.spring.boot.model.Book;
@@ -22,16 +33,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class BookServiceTests {
@@ -62,7 +63,8 @@ public class BookServiceTests {
         BookDto actual = bookService.save(requestDto);
 
         assertEquals(expected, actual, "Expected and actual BookDto should match.");
-        verify(bookRepository).save(book);    }
+        verify(bookRepository).save(book);
+    }
 
     @Test
     @DisplayName("""
@@ -152,7 +154,8 @@ public class BookServiceTests {
     @Test
     @DisplayName("""
             Test checks whether the searchBooks method
-            correctly searches and returns a list of books based on the specified search parameters""")
+            correctly searches and returns a list of
+            books based on the specified search parameters""")
     void testSearchBooks_WithCorrectParameters_ShouldReturnBooks() {
         BookSearchParameters parameters = new BookSearchParameters(
                 new String[]{"Author"},

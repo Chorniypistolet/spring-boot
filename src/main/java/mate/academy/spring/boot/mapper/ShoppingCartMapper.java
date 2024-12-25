@@ -1,8 +1,8 @@
 package mate.academy.spring.boot.mapper;
 
 import mate.academy.spring.boot.config.MapperConfig;
-import mate.academy.spring.boot.dto.cartItem.CartItemDto;
-import mate.academy.spring.boot.dto.shoppingCart.ShoppingCartDto;
+import mate.academy.spring.boot.dto.cartitem.CartItemDto;
+import mate.academy.spring.boot.dto.shoppingcart.ShoppingCartDto;
 import mate.academy.spring.boot.model.CartItem;
 import mate.academy.spring.boot.model.ShoppingCart;
 import org.mapstruct.Mapper;
