@@ -2,10 +2,13 @@ package mate.academy.spring.boot.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mate.academy.spring.boot.dto.order.OrderDto;
 import mate.academy.spring.boot.dto.order.OrderRequestDto;
-import mate.academy.spring.boot.dto.orderItemDto.OrderItemDto;
+import mate.academy.spring.boot.dto.orderitemdto.OrderItemDto;
 import mate.academy.spring.boot.dto.status.StatusRequestDto;
 import mate.academy.spring.boot.exception.OrderProcessingException;
 import mate.academy.spring.boot.mapper.OrderItemMapper;
@@ -15,16 +18,11 @@ import mate.academy.spring.boot.model.OrderItem;
 import mate.academy.spring.boot.model.ShoppingCart;
 import mate.academy.spring.boot.model.Status;
 import mate.academy.spring.boot.repository.order.OrderRepository;
-import mate.academy.spring.boot.repository.orderItem.OrderItemRepository;
-import mate.academy.spring.boot.repository.shoppingCart.ShoppingCartRepository;
+import mate.academy.spring.boot.repository.orderitem.OrderItemRepository;
+import mate.academy.spring.boot.repository.shoppingcart.ShoppingCartRepository;
 import mate.academy.spring.boot.service.OrderService;
-import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +55,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto createOrder(Long userId, OrderRequestDto orderRequestDto) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Shopping cart not found for user " + userId));
+                .orElseThrow(() -> new EntityNotFoundException("Shopping cart"
+                        + " not found for user " + userId));
         if (shoppingCart.getCartItemSet().isEmpty()) {
             throw new OrderProcessingException("CartItems not found ");
         }
@@ -82,12 +81,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderItemDto getItemByOrderIdAndItemId(Long orderId, Long itemId) {
-        return orderItemMapper.toOrderItemDto(orderItemRepository.findByOrderIdAndItemId(orderId, itemId));
+        return orderItemMapper.toOrderItemDto(orderItemRepository
+                .findByOrderIdAndItemId(orderId, itemId));
     }
 
     private BigDecimal getTotal(ShoppingCart shoppingCart) {
         return shoppingCart.getCartItemSet().stream()
-                .map(item -> item.getBook().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .map(item -> item.getBook().getPrice()
+                        .multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

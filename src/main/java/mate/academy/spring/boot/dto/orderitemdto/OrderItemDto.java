@@ -1,4 +1,5 @@
-package mate.academy.spring.boot.dto.orderItemDto;
+package mate.academy.spring.boot.dto.orderitemdto;
+
 import lombok.Data;
 
 @Data

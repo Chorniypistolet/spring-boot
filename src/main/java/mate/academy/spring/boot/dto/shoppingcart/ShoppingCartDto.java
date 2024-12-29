@@ -1,8 +1,8 @@
-package mate.academy.spring.boot.dto.shoppingCart;
+package mate.academy.spring.boot.dto.shoppingcart;
 
-import lombok.Data;
-import mate.academy.spring.boot.dto.cartItem.CartItemDto;
 import java.util.Set;
+import lombok.Data;
+import mate.academy.spring.boot.dto.cartitem.CartItemDto;
 
 @Data
 public class ShoppingCartDto {

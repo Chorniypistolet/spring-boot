@@ -1,15 +1,33 @@
-package mate.academy.spring.boot.controllerTests;
+package mate.academy.spring.boot.controller;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.sql.DataSource;
 import lombok.SneakyThrows;
 import mate.academy.spring.boot.dto.book.BookDtoWithoutCategoryIds;
 import mate.academy.spring.boot.dto.category.CategoryDto;
 import mate.academy.spring.boot.dto.category.CategoryRequestDto;
-import org.junit.jupiter.api.TestInfo;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
@@ -22,23 +40,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
-import javax.sql.DataSource;
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CategoryControllerTest {
@@ -56,13 +57,14 @@ public class CategoryControllerTest {
                 .webAppContextSetup(applicationContext)
                 .apply(springSecurity())
                 .build();
-        if (testInfo.getDisplayName().equals("Should return books by category ID when category exists")) {
+        if (testInfo.getDisplayName().equals("Should return books by"
+                + " category ID when category exists")) {
             return;
         }
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(connection,
-            new ClassPathResource("database/add-categories-to-categories-table.sql"));
+                new ClassPathResource("database/add-categories-to-categories-table.sql"));
         }
     }
 
@@ -71,7 +73,8 @@ public class CategoryControllerTest {
             @Autowired DataSource dataSource,
             TestInfo testInfo
     ) {
-        if (testInfo.getDisplayName().equals("Should return books by category ID when category exists")) {
+        if (testInfo.getDisplayName().equals("Should return books by"
+                + " category ID when category exists")) {
             return;
         }
         teardown(dataSource);
@@ -81,9 +84,8 @@ public class CategoryControllerTest {
     static void teardown(DataSource dataSource) {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
-            ScriptUtils.executeSqlScript(
-            connection,
-            new ClassPathResource("database/remove-categories-from-categories-table.sql")
+            ScriptUtils.executeSqlScript(connection,
+                new ClassPathResource("database/remove-categories-from-categories-table.sql")
             );
         }
     }
@@ -91,7 +93,7 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should create new category, and return CategoryDto")
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    public void testAddCategory_WithValidRequest_ShouldCreateAndReturnCategoryDto() throws Exception {
+    public void testAddCategory_WithValidRequest_ShouldReturnCategoryDto() throws Exception {
         CategoryRequestDto categoryRequestDto = getCategoryRequestDto("Test Category");
         categoryRequestDto.setDescription("Test Description");
         CategoryDto expected = getCategoryDto("Test Category");
@@ -104,7 +106,8 @@ public class CategoryControllerTest {
                 )
                 .andExpect(status().isCreated())
                 .andReturn();
-        CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), CategoryDto.class);
+        CategoryDto actual = objectMapper
+                .readValue(result.getResponse().getContentAsString(), CategoryDto.class);
 
         assertNotNull(actual);
         assertNotNull(actual.getId());
@@ -142,7 +145,8 @@ public class CategoryControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         List<CategoryDto> actual = objectMapper.readValue(result.getResponse().getContentAsString(),
-                objectMapper.getTypeFactory().constructCollectionType(List.class, CategoryDto.class));
+                objectMapper.getTypeFactory()
+                        .constructCollectionType(List.class, CategoryDto.class));
 
         assertNotNull(actual);
         assertFalse(actual.isEmpty());
@@ -152,7 +156,7 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should update category, and return CategoryDto")
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    public void testUpdateCategory_WithValidRequest_ShouldUpdateAndReturnCategoryDto() throws Exception {
+    public void testUpdateCategory_WithValidRequest_ShouldReturnCategoryDto() throws Exception {
         Long categoryId = 1L;
         CategoryRequestDto categoryRequestDto = getCategoryRequestDto("NewTitle");
         CategoryDto expected = getCategoryDto("NewTitle");
@@ -198,7 +202,8 @@ public class CategoryControllerTest {
         MvcResult result = mockMvc.perform(get("/categories/{id}", categoryId))
                 .andExpect(status().isOk())
                 .andReturn();
-        CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), CategoryDto.class);
+        CategoryDto actual = objectMapper
+                .readValue(result.getResponse().getContentAsString(), CategoryDto.class);
 
         assertNotNull(actual);
         assertNotNull(actual.getId());
@@ -248,7 +253,8 @@ public class CategoryControllerTest {
                 .andReturn();
         List<BookDtoWithoutCategoryIds> actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
-                objectMapper.getTypeFactory().constructCollectionType(List.class, BookDtoWithoutCategoryIds.class)
+                objectMapper.getTypeFactory()
+                        .constructCollectionType(List.class, BookDtoWithoutCategoryIds.class)
         );
 
         assertNotNull(actual);
@@ -259,7 +265,7 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should return empty list when category does not exist")
     @WithMockUser
-    public void testGetBooksByCategoryId_WhenCategoryDoesNotExist_ShouldReturnEmptyList() throws Exception {
+    public void testGetBooksByCategoryId_CategoryDoesNotExist_ShouldEmptyList() throws Exception {
         Long nonExistentCategoryId = 88L;
         List<BookDtoWithoutCategoryIds> expected = new ArrayList<>();
 
@@ -294,7 +300,7 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should return 404 Not Found when trying to fetch a deleted category")
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    public void getDeletedCategory_WhenCategoryDoesNotExist_ShouldReturnNotFound() throws Exception {
+    public void getDeletedCategory_WhenCategoryDoesNotExist_ShouldNotFound() throws Exception {
         Long categoryId = 4L;
 
         int expected = HttpStatus.NOT_FOUND.value();
@@ -312,7 +318,9 @@ public class CategoryControllerTest {
         return categoryDto;
     }
 
-    private BookDtoWithoutCategoryIds getBookDtoWithoutCategoryIds(String title, String author, BigDecimal price) {
+    private BookDtoWithoutCategoryIds getBookDtoWithoutCategoryIds(String title,
+                                                                   String author,
+                                                                   BigDecimal price) {
         BookDtoWithoutCategoryIds bookDtoWithoutCategoryIds = new BookDtoWithoutCategoryIds();
         bookDtoWithoutCategoryIds.setTitle(title);
         bookDtoWithoutCategoryIds.setAuthor(author);

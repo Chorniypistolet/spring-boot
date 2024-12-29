@@ -2,11 +2,11 @@ package mate.academy.spring.boot.service.impl;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import mate.academy.spring.boot.dto.book.UpdateBookRequestDto;
 import mate.academy.spring.boot.dto.book.BookDto;
+import mate.academy.spring.boot.dto.book.BookDtoWithoutCategoryIds;
 import mate.academy.spring.boot.dto.book.BookSearchParameters;
 import mate.academy.spring.boot.dto.book.CreateBookRequestDto;
-import mate.academy.spring.boot.dto.book.BookDtoWithoutCategoryIds;
+import mate.academy.spring.boot.dto.book.UpdateBookRequestDto;
 import mate.academy.spring.boot.exception.EntityNotFoundException;
 import mate.academy.spring.boot.mapper.BookMapper;
 import mate.academy.spring.boot.model.Book;
@@ -60,7 +60,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> searchBooks(BookSearchParameters bookSearchParameters, Pageable pageable) {
-        Specification<Book> bookSpecification = bookSpecificationBuilder.build(bookSearchParameters);
+        Specification<Book> bookSpecification = bookSpecificationBuilder
+                .build(bookSearchParameters);
         return bookRepository.findAll(bookSpecification, pageable).stream()
                 .map(bookMapper::toDto)
                 .toList();

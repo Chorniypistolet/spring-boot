@@ -1,11 +1,21 @@
-package mate.academy.spring.boot.serviceTests;
+package mate.academy.spring.boot.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
 import mate.academy.spring.boot.dto.category.CategoryDto;
 import mate.academy.spring.boot.dto.category.CategoryRequestDto;
+import mate.academy.spring.boot.exception.EntityNotFoundException;
 import mate.academy.spring.boot.mapper.CategoryMapper;
 import mate.academy.spring.boot.model.Category;
 import mate.academy.spring.boot.repository.category.CategoryRepository;
-import mate.academy.spring.boot.exception.EntityNotFoundException;
 import mate.academy.spring.boot.service.impl.CategoryServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,15 +23,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import java.util.List;
-import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceTests {
@@ -39,7 +40,8 @@ public class CategoryServiceTests {
         List<Category> categories = List.of(new Category(), new Category());
         List<CategoryDto> expected = List.of(new CategoryDto(), new CategoryDto());
         when(categoryRepository.findAll()).thenReturn(categories);
-        when(categoryMapper.toDto(any(Category.class))).thenReturn(expected.get(0), expected.get(1));
+        when(categoryMapper.toDto(any(Category.class)))
+                .thenReturn(expected.get(0), expected.get(1));
         List<CategoryDto> actual = categoryService.findAll();
         assertEquals(expected, actual);
     }

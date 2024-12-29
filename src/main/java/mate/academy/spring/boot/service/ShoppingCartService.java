@@ -1,7 +1,7 @@
 package mate.academy.spring.boot.service;
 
-import mate.academy.spring.boot.dto.cartItem.CartItemRequestDto;
-import mate.academy.spring.boot.dto.shoppingCart.ShoppingCartDto;
+import mate.academy.spring.boot.dto.cartitem.CartItemRequestDto;
+import mate.academy.spring.boot.dto.shoppingcart.ShoppingCartDto;
 
 public interface ShoppingCartService {
     ShoppingCartDto getCartByUserId(Long userId);

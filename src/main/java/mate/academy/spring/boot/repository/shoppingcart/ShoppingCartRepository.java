@@ -1,10 +1,10 @@
-package mate.academy.spring.boot.repository.shoppingCart;
+package mate.academy.spring.boot.repository.shoppingcart;
 
+import java.util.Optional;
 import mate.academy.spring.boot.model.ShoppingCart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import java.util.Optional;
 
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long> {
     Optional<ShoppingCart> findByUserId(Long userId);

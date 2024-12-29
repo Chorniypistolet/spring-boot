@@ -1,10 +1,10 @@
 package mate.academy.spring.boot.dto.order;
 
-import lombok.Data;
-import mate.academy.spring.boot.dto.orderItemDto.OrderItemDto;
-import mate.academy.spring.boot.model.Status;
 import java.time.LocalDateTime;
 import java.util.Set;
+import lombok.Data;
+import mate.academy.spring.boot.dto.orderitemdto.OrderItemDto;
+import mate.academy.spring.boot.model.Status;
 
 @Data
 public class OrderDto {

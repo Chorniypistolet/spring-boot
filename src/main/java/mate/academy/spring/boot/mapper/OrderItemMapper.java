@@ -1,7 +1,7 @@
 package mate.academy.spring.boot.mapper;
 
 import mate.academy.spring.boot.config.MapperConfig;
-import mate.academy.spring.boot.dto.orderItemDto.OrderItemDto;
+import mate.academy.spring.boot.dto.orderitemdto.OrderItemDto;
 import mate.academy.spring.boot.model.OrderItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,8 +1,8 @@
 package mate.academy.spring.boot.service;
 
+import java.util.List;
 import mate.academy.spring.boot.dto.category.CategoryDto;
 import mate.academy.spring.boot.dto.category.CategoryRequestDto;
-import java.util.List;
 
 public interface CategoryService {
     List<CategoryDto> findAll();
